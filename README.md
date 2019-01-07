@@ -15,3 +15,5 @@ This is a short translator between the four common ways to do basic data prepara
 |**left join**|`merge(iris, grouped_stats, by = "Species", all.x = TRUE)`|`left_join(iris, grouped_stats, by = "Species)`| `grouped_stats[iris, on = "Species")` or like `merge`| `sqldf("select a.*, b.med from iris a left join grouped_stats b on a.Species = b.Species")`|
 |**inner join**|`merge(iris, grouped_stats, by = "Species")`|`inner_join(iris, grouped_stats, by = "Species)`| `grouped_stats[iris, on = "Species", nomatch = 0)` or like `merge`| `sqldf("select a.*, b.med from iris a inner join grouped_stats b on a.Species = b.Species")`|
 |**add grouped stats**|`transform(iris, med = ave(Sepal.Width, Species, FUN = median))`|`iris %>% group_by(Species) %>% mutate(med = median(Sepal.Width))` |`iris[, med := median(Sepal.Width), by = Species]`|group by and left join|
+|**transpose to long**|`reshape(???, direction = "long")`|`gather`|`melt`|through "union all"|
+|**transpose to wide**|`reshape(???, direction = "wide")`|`spread`|`dcast`|through "left joins"|
