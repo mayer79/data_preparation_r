@@ -1,10 +1,20 @@
 # base R vs. dplyr vs. data.table vs. sqldf
 
-This is a short translator between the four common ways to do basic data preparation queries in R, illustrated with data set `iris` with 150 observations of four numeric columns and one factor `Species`.
+This is a short translator between the four common ways to do basic data preparation queries in R.
 
-|Task   | base R  | dplyr  |  data.table | sqldf  | 
+- **base R**: a very good starting point; easy to program with but not always easy to read. A must for R enthusiasts.
+
+- **dplyr/tidyverse**: very easy to write and read since each function cares about exactly one single task; 100% compatible with the chaining approach of `magrittr`. Difficult to understand the internals though.
+
+- **data.table**: extremely fast and memory efficient, so *the* approach for large data; longer queries are not always easy to read.
+
+- **sqldf**: very easy to read, even for people who have never used R before; great to learn SQL on the fly; compared to the other approaches, it is quite slow, so suboptimal for large dage.
+
+Illustrated with data set `iris` with 150 observations of four numeric columns and one factor `Species`.
+
+|Task   | base R  | dplyr/tidyverse  |  data.table | sqldf  | 
 |-|-|-|-|-|
-|**library**||`dplyr`|`data.table`|`sqldf`|
+|**library**||`dplyr`, `tidyverse`|`data.table`|`sqldf`|
 |**view some rows**   |`head(iris)`   | `iris` | `iris` | `sqldf("select * from iris limit 6")`  |
 |**select rows**|`iris[cond, ]` or `subset(iris, cond)`|`filter(iris, cond)`|`iris[cond]`|`sqldf("select * from iris where cond)`|
 |**sort rows** | `iris[order(cols), ]`  |  `arrange(iris, cols)` | `iris[order(cols)]`  | `sqldf("select * from iris order by cols")`  |
@@ -17,3 +27,5 @@ This is a short translator between the four common ways to do basic data prepara
 |**add grouped stats**|`transform(iris, med = ave(Sepal.Width, Species, FUN = median))`|`iris %>% group_by(Species) %>% mutate(med = median(Sepal.Width))` |`iris[, med := median(Sepal.Width), by = Species]`|group by and left join|
 |**transpose to long**|`reshape(???, direction = "long")`|`gather`|`melt`|through "union all"|
 |**transpose to wide**|`reshape(???, direction = "wide")`|`spread`|`dcast`|through "left joins"|
+
+This is version 1 that will hopefully gets updated from time to time ;).
