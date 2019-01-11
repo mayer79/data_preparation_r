@@ -17,7 +17,7 @@ Illustrated with data set `iris` with 150 observations of four numeric columns a
 |**library**||`dplyr`, `tidyverse`|`data.table`|`sqldf`|
 |**view some rows**   |`head(iris)`   | `iris` | `iris` | `sqldf("select * from iris limit 6")`  |
 |**select rows**|`iris[cond, ]` or `subset(iris, cond)`|`filter(iris, cond)`|`iris[cond]`|`sqldf("select * from iris where cond)`|
-|**sort rows** | `iris[order(cols), ]`  |  `arrange(iris, cols)` | `iris[order(cols)]`  | `sqldf("select * from iris order by cols")`  |
+|**sort rows** | `iris[order(cols), ]`  |  `arrange(iris, cols)` | `iris[order(cols)]` or in-place `setorder(iris, cols)` | `sqldf("select * from iris order by cols")`  |
 |**select columns**   | `iris[, cols]` or `subset(iris, select = cols)` | `select(iris, cols)`  | `iris[, cols]`  |  `sqldf("select cols from iris")` |
 |**remove column** | `iris$Species <- NULL`  | `mutate(iris, Species = NULL)` |  `iris[, Species := NULL]` | `sqldf("select other cols from iris)`  |
 |**add column** | `iris$x <- iris$Sepal.Length^2` or `transform(iris, x = Sepal.Length^2)` | `mutate(iris, x = Sepal.Length^2)` |  `iris[, x := Sepal.Length^2)` | `sqldf("select *, power([Sepal.Length], 2) as x from iris")`  |
@@ -27,5 +27,6 @@ Illustrated with data set `iris` with 150 observations of four numeric columns a
 |**add grouped stats**|`transform(iris, med = ave(Sepal.Width, Species, FUN = median))`|`iris %>% group_by(Species) %>% mutate(med = median(Sepal.Width))` |`iris[, med := median(Sepal.Width), by = Species]`|group by and left join|
 |**transpose to long**|`reshape(???, direction = "long")`|`gather`|`melt`|through "union all"|
 |**transpose to wide**|`reshape(???, direction = "wide")`|`spread`|`dcast`|through "left joins"|
+|**row bind**|`rbind(data1, data2)`|`bind_rows(data1, data2)`|`rbind(data1, data2)` or `rbindlist(list(data1, data2))`|`sqldf("select * from data1 union all select * from data2")`|
+|**column bind**|`cbind(data1, data2)`|`bind_cols(data1, data2)`|`cbind(data1, data2)`|Add row numbers, then join|
 
-This is version 1 that will hopefully gets updated from time to time ;).
